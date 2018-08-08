@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-FROM debian:jessie 
+FROM  debian:jessie 
 
-MAINTAINER Mark McCahill "mark.mccahill@duke.edu"
+MAINTAINER  Mark McCahill "mark.mccahill@duke.edu"
 
 USER root
 
