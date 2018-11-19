@@ -391,7 +391,7 @@ RUN mkdir -p $HOME/.ipython/profile_default/startup
 USER root
 
 # RUN conda install --quiet --yes -c r r-essentials
-# RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
+RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
 RUN conda install --quiet --yes -c bioconda bioconductor-shortread
 RUN conda install --quiet --yes -c bioconda bioconductor-dada2
 RUN conda install --quiet --yes 'nbdime' 
