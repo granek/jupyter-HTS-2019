@@ -98,8 +98,8 @@ RUN mkdir /home/$NB_USER/work && \
 
 # Install Jupyter notebook as jovyan
 
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install jupyter
+RUN python -m pip install --upgrade pip && \
+    python -m pip install jupyter
 
 #RUN conda install --quiet --yes \
 #    'jupyter' 
