@@ -12,7 +12,7 @@ stages:
 test_build:
   tags: 
     - ipyn-az-07
-    - HTS2018
+    - HTS2019
   stage: build
   script:
     - echo "build a test instance of the container"
@@ -25,7 +25,7 @@ test_build:
 test_deploy_staging:
   tags: 
     - ipyn-az-07
-    - HTS2018
+    - HTS2019
   stage: deploy_staging
   script:
     - echo "deploy the test instance to port 443"
@@ -51,7 +51,7 @@ test_deploy_staging:
 build_production_07:
   tags: 
     - ipyn-az-07
-    - HTS2018
+    - HTS2019
   <<: *build_production_def    
 
 
@@ -73,7 +73,7 @@ build_production_07:
 deploy_production_07:
   tags: 
     - ipyn-az-07
-    - HTS2018
+    - HTS2019
   <<: *deploy_production_def           
 
 
