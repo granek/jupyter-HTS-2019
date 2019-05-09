@@ -41,7 +41,7 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     rsync \
     gzip \
     tar \
-    pip \
+    python3-pip \
     apt-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
