@@ -99,8 +99,8 @@ RUN mkdir /home/$NB_USER/work && \
 
 # Install Jupyter notebook as jovyan
 
-RUN python -m pip install --upgrade pip && \
-    python -m pip install jupyter
+RUN python -m pip3 install --upgrade pip && \
+    python -m pip3 install jupyter
 
 #RUN conda install --quiet --yes \
 #    'jupyter' 
@@ -124,7 +124,7 @@ USER $NB_USER
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
-RUN pip install --quiet \
+RUN pip3 install --quiet \
     'nomkl' \
     'ipywidgets' \
     'pandas' \
@@ -270,11 +270,11 @@ RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 #--------- Duke-specific additions ---
 # add bash kernel for the user jovyan
 USER jovyan
-RUN pip install  bash_kernel
+RUN pip3 install  bash_kernel
 RUN python -m bash_kernel.install
 USER root
 
-RUN pip install  \
+RUN pip3 install  \
     'numpy' \
     'pillow' \
     'requests' \
@@ -311,11 +311,11 @@ USER jovyan
 # ggplot
 #
 #RUN pip install ggplot
-RUN pip install cppimport
+RUN pip3 install cppimport
 
 # pgmpy is not available in anaconda, so we use pip to install it
-RUN pip install pgmpy
-RUN pip install pygraphviz
+RUN pip3 install pgmpy
+RUN pip3 install pygraphviz
 
 
 ####### start HTS-summer-2018 additions
