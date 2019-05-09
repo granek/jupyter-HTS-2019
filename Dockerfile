@@ -1,10 +1,10 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-FROM debian:stretch
+FROM debian:stretch 
 
 MAINTAINER Mark McCahill "mark.mccahill@duke.edu"
-#Edited by Janice McCarthy 5/6/2019
+# Modified by Janice McCarthy 5/9/2019
 
 USER root
 
@@ -12,7 +12,7 @@ USER root
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 RUN REPO=http://cdn-fastly.deb.debian.org \
- && echo "deb $REPO/debian stretch main\ndeb $REPO/debian-security stretch updates main" > /etc/apt/sources.list \
+ && echo "deb $REPO/debian stretch main\ndeb $REPO/debian-security stretch/updates main" > /etc/apt/sources.list \
  && apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
     wget \
@@ -57,8 +57,6 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 # Configure environment
 #ENV CONDA_DIR /opt/conda
 #ENV PATH $CONDA_DIR/bin:$PATH
-#We will not use conda. 
-
 ENV SHELL /bin/bash
 ENV NB_USER jovyan
 ENV NB_UID 1000
@@ -68,7 +66,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 # Create jovyan user with UID=1000 and in the 'users' group
-RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
 #    mkdir -p $CONDA_DIR && \
 #    chown $NB_USER $CONDA_DIR
 
@@ -98,6 +96,10 @@ RUN mkdir /home/$NB_USER/work && \
 ### RUN echo "jpeg 8*" >> /opt/conda/conda-meta/pinned
 
 # Install Jupyter notebook as jovyan
+
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install jupyter
+
 #RUN conda install --quiet --yes \
 #    'jupyter' 
     # 'notebook' \
@@ -108,12 +110,10 @@ RUN mkdir /home/$NB_USER/work && \
 #----------- scipy
 USER root
 
-# libav-tools for matplotlib anim and pip
+# libav-tools for matplotlib anim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \ 
       libav-tools && \
-      python3-pip &&\
-      python3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -122,9 +122,7 @@ USER $NB_USER
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
-
 RUN pip install --quiet \
-    'jupyter' \
     'nomkl' \
     'ipywidgets' \
     'pandas' \
@@ -161,7 +159,7 @@ RUN pip install --quiet \
     'pytables' \
     'plotnine' \
     'xlrd' 
-
+    
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 RUN ipcluster nbextension  enable --user
@@ -171,24 +169,37 @@ RUN ipcluster nbextension  enable --user
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
 #RUN conda create --quiet --yes -p $CONDA_DIR/envs/python2 python=2.7 \
- #   'nomkl' \
- #   'ipython=4.2*' \
- #   'ipywidgets=5.2*' \
- #   'pandas=0.19*' \
- #   'numexpr=2.6*' \
- #   'matplotlib=1.5*' \
- #   'scipy=0.17*' \
- #   'seaborn=0.7*' \
- #   'patsy=0.4*' \
- #   'statsmodels=0.6*' \
- #   'numba=0.23*' \
- #   'bokeh=0.11*' 
-    
+#    'nomkl' \
+#    'ipython=4.2*' \
+#    'ipywidgets=5.2*' \
+#    'pandas=0.19*' \
+#    'numexpr=2.6*' \
+#    'matplotlib=1.5*' \
+#    'scipy=0.17*' \
+#    'seaborn=0.7*' \
+#    'scikit-learn=0.17*' \
+#    'scikit-image=0.11*' \
+#    'sympy=1.0*' \
+#    'cython=0.23*' \
+#    'patsy=0.4*' \
+#    'statsmodels=0.6*' \
+#    'cloudpickle=0.1*' \
+#    'dill=0.2*' \
+#    'numba=0.23*' \
+#    'bokeh=0.11*' \
+#    'hdf5=1.8.17' \
+#    'h5py=2.6*' \
+#    'sqlalchemy=1.0*' \
+#    'pyzmq' \
+#    'vincent=0.4.*' \
+#    'beautifulsoup4=4.5.*' \
+#    'xlrd' && \
+#    conda remove -n python2 --quiet --yes --force qt pyqt && \
+#    conda clean -tipsy
 # Add shortcuts to distinguish pip for python2 and python3 envs
 #RUN ln -s $CONDA_DIR/envs/python2/bin/pip $CONDA_DIR/bin/pip2 && \
 #    ln -s $CONDA_DIR/bin/pip $CONDA_DIR/bin/pip3
 
-## FIX
 # Import matplotlib the first time to build the font cache.
 #ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
 #RUN MPLBACKEND=Agg $CONDA_DIR/envs/python2/bin/python -c "import matplotlib.pyplot"
@@ -203,7 +214,7 @@ USER root
 # switching at runtime.
 #RUN $CONDA_DIR/envs/python2/bin/python -m ipykernel install
 
-#USER $NB_USER
+USER $NB_USER
 
 #----------- end scipy
 
@@ -224,13 +235,16 @@ RUN apt-get update && \
 USER $NB_USER
 
 # R packages
-RUN apt install  \
-    'r-base=3.5.2'
-RUN Rscript -e install.packages(pkgs = c("plyr", "devtools", 
-         "tidyverse", "shiny", "rmarkdown*", "forecast", "rsqlite=",
-         "reshape2", "nycflights13", "caret", "rcurl", "crayon", "randomforest",
-         "htmltools", "sparklyr", "htmlwidgets", "hexbin"), dependencies = TRUE)
+RUN apt-get update && \
+    apt install 'r-base=3.5.3' &&\
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
+    
+RUN Rscript -e "install.packages('r-base','r-irkernel','r-plyr','r-devtools','r-tidyverse','r-shiny')"
+RUN Rscript -e "install.packages('r-rmarkdown', 'r-forecast', 'r-rsqlite', 'r-reshape2', 'r-nycflights13')"
+RUN Rscript -e "install.packages('r-caret', 'r-rcurl', 'r-crayon', 'r-randomforest', 'r-htmltools')"
+RUN Rscript -e "install.packages('r-sparklyr', 'r-htmlwidgets', 'r-hexbin')"
 
 
 #----------- end datascience
@@ -256,10 +270,9 @@ RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 USER jovyan
 RUN pip install  bash_kernel
 RUN python -m bash_kernel.install
-
 USER root
 
-RUN pip install \
+RUN pip install  \
     'numpy' \
     'pillow' \
     'requests' \
@@ -271,7 +284,6 @@ USER root
 # we need dvipng so that matplotlib can do LaTeX
 # we want OpenBLAS for faster linear algebra as described here: http://brettklamer.com/diversions/statistical/faster-blas-in-r/
 # Armadillo C++ linear algebra library - see http://arma.sourceforge.net
-
 RUN apt-get update \
  && apt-get install -yq --no-install-recommends \
     dvipng \
@@ -299,6 +311,7 @@ USER jovyan
 #RUN pip install ggplot
 RUN pip install cppimport
 
+# pgmpy is not available in anaconda, so we use pip to install it
 RUN pip install pgmpy
 RUN pip install pygraphviz
 
@@ -313,6 +326,7 @@ RUN apt-get update && \
     libxml2-dev \
     libgsl0-dev \
     fastqc default-jre \
+    openjdk-7-jdk \
     circos \
     parallel \
     time \
@@ -322,13 +336,13 @@ RUN apt-get update && \
 
 RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/sources.list.d/backports.list && \
     apt-get update && \
-    apt-get -t jessie-backports install -y --no-install-recommends \
+    apt-get -t stretch-backports install -y --no-install-recommends \
     bwa \
     samtools \
     tabix \
     picard-tools \
-    openjdk-8-jdk \
-    openjdk-8-jre \
+    openjdk-11-jdk \
+    openjdk-11-jre \
     sra-toolkit \
     bcftools \
     bedtools \
@@ -350,14 +364,14 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/s
 
 
 # Install R and bioconductor packages for Kouros's notebooks
-RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
-            repos='https://cran.revolutionanalytics.com/', \
-            dependencies=TRUE)"
-RUN Rscript -e "install.packages(pkgs = c('dendextend'), \
-            repos='https://cran.revolutionanalytics.com/', \
-            dependencies=TRUE)"
-RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
-    biocLite(pkgs=c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
+#RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
+#            repos='https://cran.revolutionanalytics.com/', \
+#            dependencies=TRUE)"
+#RUN Rscript -e "install.packages(pkgs = c('dendextend'), \
+#            repos='https://cran.revolutionanalytics.com/', \
+#            dependencies=TRUE)"
+#RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
+#    biocLite(pkgs=c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
 
 USER $NB_USER
 
@@ -368,14 +382,14 @@ RUN mkdir -p $HOME/.ipython/profile_default/startup
 
 USER root
 
-#FIX
+# RUN conda install --quiet --yes -c r r-essentials
+# RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
 #RUN conda install --quiet --yes -c bioconda bioconductor-shortread
 #RUN conda install --quiet --yes -c bioconda bioconductor-dada2
 #RUN conda install --quiet --yes 'nbdime' 
 #RUN conda install --quiet --yes -c bioconda bioconductor-deseq2 bioconductor-pathview r-rentrez
 #RUN conda install --quiet --yes -n python2 --channel https://conda.anaconda.org/Biobuilds htseq pysam biopython tophat
 
-#FIX???
 # add htseq-count to path
 #ENV PATH=${PATH}:$CONDA_DIR/envs/python2/bin
 
@@ -394,3 +408,4 @@ USER root
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER jovyan
+
