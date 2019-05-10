@@ -341,7 +341,6 @@ RUN apt-get update && \
     libxml2-dev \
     libgsl0-dev \
     fastqc default-jre \
-    openjdk-7-jdk \
     circos \
     parallel \
     time \
