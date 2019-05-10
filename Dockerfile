@@ -248,7 +248,7 @@ RUN apt-get update && \
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_USER
+
 
 # R packages
 RUN apt-get update && \
@@ -256,6 +256,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+USER $NB_USER
     
 RUN Rscript -e "install.packages('r-base','r-irkernel','r-plyr','r-devtools','r-tidyverse','r-shiny')"
 RUN Rscript -e "install.packages('r-rmarkdown', 'r-forecast', 'r-rsqlite', 'r-reshape2', 'r-nycflights13')"
