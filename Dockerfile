@@ -125,32 +125,38 @@ USER $NB_USER
 # use notebook-friendly backends in these images
 
 RUN pip3 install --upgrade setuptools
-RUN pip3 install --quiet \
+RUN pip3 install \
  #   'nomkl' \
     'ipywidgets' \
-    'pandas' \
-    'numexpr' \
+    'pandas' 
+    
+RUN pip3 install 'numexpr' \
     'matplotlib' \
     'scipy' \
-    'seaborn' \
-    'scikit-learn' \
+    'seaborn' 
+    
+RUN pip3 install 'scikit-learn' \
     'scikit-image' \
     'sympy' \
-    'cython' \
-    'patsy' \
+    'cython'
+    
+RUN pip3 install 'patsy' \
     'statsmodels' \
     'cloudpickle' \
-    'dill' \
-    'numba' \
+    'dill' 
+    
+RUN pip3 install 'numba' \
     'bokeh' \
-    'sqlalchemy' \
+    'sqlalchemy'
  #   'hdf5' \
-    'h5py' \
+ 
+RUN pip3 install 'h5py' \
 	'pyzmq' \
     'vincent' \
     'beautifulsoup4' \
-    'openpyxl' \
-    'pandas-datareader' \
+    'openpyxl'
+    
+RUN pip3 install 'pandas-datareader' \
     'ipython-sql' \
     'pandasql' \
     'memory_profiler'\
