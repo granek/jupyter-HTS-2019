@@ -159,7 +159,7 @@ RUN pip3 install --quiet \
     'joblib' \
     'ipyparallel' \
     'pybind11' \
-    'pytables' \
+ #   'pytables' \
     'plotnine' \
     'xlrd' 
     
