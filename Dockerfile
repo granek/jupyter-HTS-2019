@@ -124,7 +124,7 @@ USER $NB_USER
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
 RUN pip3 install --quiet \
-    'nomkl' \
+ #   'nomkl' \
     'ipywidgets' \
     'pandas' \
     'numexpr' \
