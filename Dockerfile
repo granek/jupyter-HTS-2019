@@ -284,8 +284,7 @@ RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 #--------- Duke-specific additions ---
 # add bash kernel for the user jovyan
 USER jovyan
-RUN pip3 install  bash-kernel
-RUN python -m bash-kernel.install
+RUN pip3 install  bash_kernel && python -m bash_kernel.install
 
 USER root
 
