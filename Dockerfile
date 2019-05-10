@@ -144,7 +144,7 @@ RUN pip3 install --quiet \
     'numba' \
     'bokeh' \
     'sqlalchemy' \
-    'hdf5' \
+ #   'hdf5' \
     'h5py' \
 	'pyzmq' \
     'vincent' \
