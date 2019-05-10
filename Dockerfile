@@ -255,7 +255,7 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /
 
 # R packages
 RUN apt-get update && \
-    apt install 'r-base' &&\
+    apt install -yq 'r-base' &&\
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
