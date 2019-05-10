@@ -123,6 +123,8 @@ USER $NB_USER
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
+
+RUN pip3 install --upgrade setuptools
 RUN pip3 install --quiet \
  #   'nomkl' \
     'ipywidgets' \
