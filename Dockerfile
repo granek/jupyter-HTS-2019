@@ -245,10 +245,11 @@ RUN apt-get update && \
     gcc  \
     graphviz \
     libgraphviz-dev \
+    dirmngr \
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-
+    
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
 
 # R packages
 RUN apt-get update && \
