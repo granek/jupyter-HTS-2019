@@ -175,10 +175,11 @@ RUN pip3 install --no-cache-dir 'pandas-datareader' \
     'plotnine' \
     'xlrd' 
     
+USER root    
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 RUN ipcluster nbextension  enable --user
-
+USER $NB_USER
 
 # Install Python 2 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
