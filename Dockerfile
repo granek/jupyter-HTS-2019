@@ -154,7 +154,7 @@ RUN pip3 install --quiet \
     'ipython-sql' \
     'pandasql' \
     'memory_profiler'\
-    'psutil' \
+ #   'psutil' \
     'cythongsl' \
     'joblib' \
     'ipyparallel' \
