@@ -58,7 +58,8 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 
 # Configure environment
 #ENV CONDA_DIR /opt/conda
-#ENV PATH $CONDA_DIR/bin:$PATH
+
+ENV PATH $PATH:~/.local/bin
 
 ENV SHELL /bin/bash
 ENV NB_USER jovyan
