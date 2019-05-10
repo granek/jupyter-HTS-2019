@@ -127,6 +127,7 @@ USER $NB_USER
 
 RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
+RUN pip3 install jupyter
 
 RUN pip3 install --no-cache-dir  \
  #   'nomkl' \
