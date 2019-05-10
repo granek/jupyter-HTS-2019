@@ -259,10 +259,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "install.packages('r-base','r-irkernel','r-plyr','r-devtools','r-tidyverse','r-shiny')"
-RUN Rscript -e "install.packages('r-rmarkdown', 'r-forecast', 'r-rsqlite', 'r-reshape2', 'r-nycflights13')"
-RUN Rscript -e "install.packages('r-caret', 'r-rcurl', 'r-crayon', 'r-randomforest', 'r-htmltools')"
-RUN Rscript -e "install.packages('r-sparklyr', 'r-htmlwidgets', 'r-hexbin')"
+RUN Rscript -e "install.packages('irkernel','plyr','devtools','tidyverse','shinyr')"
+RUN Rscript -e "install.packages('rmarkdown', 'forecast', 'rsqlite', 'reshape2', 'nycflights13')"
+RUN Rscript -e "install.packages('caret', 'rcurl', 'crayon', 'randomforest', 'htmltools')"
+RUN Rscript -e "install.packages('sparklyr', 'htmlwidgets', 'hexbin')"
 
 
 #----------- end datascience
