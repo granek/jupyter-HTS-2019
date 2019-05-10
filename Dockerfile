@@ -245,6 +245,7 @@ RUN apt-get update && \
     gcc  \
     graphviz \
     libgraphviz-dev \
+    gnupg2 \
     dirmngr \
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
