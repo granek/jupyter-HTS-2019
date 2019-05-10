@@ -59,7 +59,6 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 # Configure environment
 #ENV CONDA_DIR /opt/conda
 
-ENV PATH $PATH:~/.local/bin
 
 ENV SHELL /bin/bash
 ENV NB_USER jovyan
@@ -68,6 +67,8 @@ ENV HOME /home/$NB_USER
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
+ENV PATH $HOME/.local/bin:$PATH
+
 
 # Create jovyan user with UID=1000 and in the 'users' group
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
