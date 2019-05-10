@@ -99,7 +99,7 @@ RUN mkdir /home/$NB_USER/work && \
 
 # Install Jupyter notebook as jovyan
 
-RUN pip3 install jupyter
+#RUN pip3 install jupyter
 
 #RUN conda install --quiet --yes \
 #    'jupyter' 
