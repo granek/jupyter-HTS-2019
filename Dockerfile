@@ -272,11 +272,12 @@ EXPOSE 8888
 ENV TINI_VERSION v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
+ENTRYPOINT ["tini", "--"]
 
 WORKDIR /home/$NB_USER/work
 
 # Configure container startup
-ENTRYPOINT ["tini", "--"]
+
 CMD ["start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
