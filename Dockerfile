@@ -384,12 +384,12 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/s
 
 
 # Install R and bioconductor packages for Kouros's notebooks
-#RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
-#            repos='https://cran.revolutionanalytics.com/', \
-#            dependencies=TRUE)"
-#RUN Rscript -e "install.packages(pkgs = c('dendextend'), \
-#            repos='https://cran.revolutionanalytics.com/', \
-#            dependencies=TRUE)"
+RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
+            repos='https://cran.revolutionanalytics.com/', \
+            dependencies=TRUE)"
+RUN Rscript -e "install.packages(pkgs = c('dendextend'), \
+            repos='https://cran.revolutionanalytics.com/', \
+            dependencies=TRUE)"
 #RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
 #    biocLite(pkgs=c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
 
@@ -401,6 +401,12 @@ RUN mkdir -p $HOME/.ipython/profile_default/startup
 # COPY mplimporthook.py $HOME/.ipython/profile_default/startup/
 
 USER root
+
+RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE))
+                      install.packages('BiocManager') \ 
+                   BiocManager::install()"
+                   
+RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
 
 # RUN conda install --quiet --yes -c r r-essentials
 # RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
