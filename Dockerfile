@@ -254,7 +254,7 @@ RUN apt-get update && \
 #RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
 # R packages
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && /
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \
     apt-get update && \
     apt install -yq 'r-base' &&\
     apt-get clean && \
