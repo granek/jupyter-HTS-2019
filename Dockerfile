@@ -485,7 +485,7 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/s
     bedtools \
     vcftools \
     seqtk \
-    ea-utils \
+#    ea-utils \
     rna-star \
     lftp \
     && apt-get clean && \
