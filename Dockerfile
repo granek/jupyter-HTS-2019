@@ -257,11 +257,13 @@ RUN apt-get update && \
 # Add cran repo    
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
-RUN apt-get update && \
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
+    apt-get update && \
     apt-cache policy r-base
 # R packages
 RUN apt-get update && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
+    apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' &&\
     apt-get update && \
     apt install -yq 'r-base' -t '3.6.0' &&\
     apt-get clean && \
