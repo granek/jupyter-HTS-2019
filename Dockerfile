@@ -250,9 +250,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    apt-get install dirmngr --install-recommends && \
-    apt-get install software-properties-common &&\
-    apt-get install apt-transport-https && apt-get clean && \
+    apt-get install dirmngr -yq --install-recommends && \
+    apt-get install software-properties-common -yq &&\
+    apt-get install apt-transport-https -yq && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Add cran repo    
