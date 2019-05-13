@@ -265,8 +265,8 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     apt-cache policy r-base
 # R packages
 RUN apt-get update && \
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-key add key.asc &&\
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
     apt-get install -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 && \
 #    apt install -yq 'r-base' -t '3.6.0' &&\
