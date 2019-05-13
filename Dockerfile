@@ -370,7 +370,7 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     apt-cache policy r-base
 # R packages
 
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35' && \ 
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
     apt-get install -yq -t stretch-cran35 r-base=3.5.3-1 && \
     apt-get clean && \
