@@ -252,8 +252,7 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install dirmngr -yq --install-recommends && \
     apt-get install software-properties-common -yq &&\
-    apt-get install apt-transport-https -yq && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install apt-transport-https -yq 
 
 # Add cran repo    
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
@@ -263,6 +262,7 @@ RUN apt-get update && \
 # R packages
 RUN apt-get update && \
     add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \
+    apt-get update && \
     apt install -yq 'r-base' -t '3.6.0' &&\
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
