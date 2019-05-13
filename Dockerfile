@@ -259,7 +259,7 @@ RUN apt-get update && \
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
 RUN apt-get update && \
-    apt-cache search "^r-.*" | sort
+    apt-cache policy r-base
 # R packages
 RUN apt-get update && \
     add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \
