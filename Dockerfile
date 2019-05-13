@@ -254,6 +254,23 @@ RUN apt-get update && \
     apt-get install software-properties-common -yq &&\
     apt-get install apt-transport-https -yq 
 
+# Public key for cran 
+RUN echo "mQGiBEXUFiURBADkTqPqcRYdLIguhC6fnwTvIxdkoN1UEBuPR6NYW4iJzvRSas/g5bPo5ZxE
+2i5BXiuVfYrSk/YiU+/lc0K6VYNDygbOfpBgGGhtfzYfFRTYNq8QsdD8L8BMYtOu5rYo5BYt
+a0vuantIS9mn9QnH7885uy5tX/TXO7ICYVHxnFNr2wCguNtMdz9+DRQ38n4iiHzTtj/7UHsD
+/0+0TLHHvY1FfakVinamR9oCm9uH9PmkGTy6jRnrvg5Z+TTgygiDdTBKPc1TqpFgoFtqh8G5
+DpDPbyh5GzBj8Ky1mBJb3bMwy2RUth1cztHEWI36xuCl+KrLtA4OYuCwJJZhOWDIO9aO2LW5
+kJhIwIuvSrEtOgTxpzy82g7eEzvLBADUrQ01fj+9VDrO2Vept8jtaGK+4kW3cBAG/UbOrTjt
+63VurXwyvNb6q7hKFUaVH42Fc0e64F217mutCyftPWYJwY4SR8hUmjEM/SYcezUDWWvVxmkF
+8M4rMhHa0j+q+et3mTKwgxehQO9hLUqRebnmJuwNqNJKb9izsPqmh83Zo7Q7Sm9oYW5uZXMg
+UmFua2UgKENSQU4gRGViaWFuIGFyY2hpdmUpIDxqcmFua2VAdW5pLWJyZW1lbi5kZT6IRgQQ
+EQIABgUCRdQ+nQAKCRAvD04U9kmvkJ3+AJ4xLMELB/fT1AwtR1azcH0lKg/TegCdEvtp3SUf
+aHP3Jvg2CkzTZOatfFuIRgQQEQIABgUCS4VoCgAKCRDvfNpxC67+5ZFyAKCAzgPTqM6sSMhB
+iaZbNCpiVtwDrQCgjMy+iqPm7SVOCq0XJsCCbxymfB+IXgQTEQIAHgUCRdQWJQIbAwYLCQgH
+AwIDFQIDAxYCAQIeAQIXgAAKCRAG+Q3lOBukgM09AKCuapN6slttAFRjs2/mgtaMMwO9sgCf
+ZD2au39Oo8QLXZhZTipN8c7j9mM=
+=BRgm" > key.asc
+
 # Add cran repo    
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
@@ -263,7 +280,7 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
 # R packages
 RUN apt-get update && \
     add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
-    apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' &&\
+    apt-key add key.asc &&\
     apt-get update && \
     apt-get install -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 && \
 #    apt install -yq 'r-base' -t '3.6.0' &&\
