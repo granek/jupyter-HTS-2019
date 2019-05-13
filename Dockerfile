@@ -249,8 +249,8 @@ RUN apt-get update && \
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt install dirmngr --install-recommends
-RUN apt install apt-transport-https
+RUN apt-get install dirmngr
+RUN apt-get install apt-transport-https
 
 # Add cran repo    
 #RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
