@@ -369,13 +369,10 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     apt-get update && \
     apt-cache policy r-base
 # R packages
-RUN apt-get update && \
-    apt-key adv --keyserver pgp.mit.edu --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' && \
-#    apt-key add key.asc &&\
-    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
+
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35' && \ 
     apt-get update && \
-    apt-get install -t stretch-cran35 r-base=3.5.3-1 && \
-#    apt install -yq 'r-base' -t '3.6.0' &&\
+    apt-get install -yq -t stretch-cran35 r-base=3.5.3-1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
