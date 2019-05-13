@@ -402,8 +402,7 @@ RUN mkdir -p $HOME/.ipython/profile_default/startup
 
 USER root
 
-RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) \
-                      install.packages('BiocManager') \ 
+RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); \ 
                    BiocManager::install()"
                    
 RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
