@@ -246,9 +246,11 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
-    dirmngr \
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN apt install dirmngr --install-recommends
+RUN apt install apt-transport-https
 
 # Add cran repo    
 #RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
