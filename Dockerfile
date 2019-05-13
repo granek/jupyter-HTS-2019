@@ -321,7 +321,7 @@ USER $NB_USER
 
 # Configure ipython kernel to use matplotlib inline backend by default
 RUN mkdir -p $HOME/.ipython/profile_default/startup
-RUN mkdir -p $HOME/.ipython/profile_default/thisisatest
+RUN mkdir -p $HOME/thisisatest
 # COPY mplimporthook.py $HOME/.ipython/profile_default/startup/
 
 USER root
