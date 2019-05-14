@@ -14,13 +14,12 @@ done < $INPUT
 IFS=$OLDIFS
 
 echo ipyn-az-$MYHOSTID.oit.duke.edu:443
-echo "init"
+
 sudo docker kill jupyter-hts-2019-test-443
 sudo docker rm jupyter-hts-2019-test-443
 sudo docker run --name jupyter-hts-2019-test-443 \
   -d -p 127.0.0.1\:\:8888 \
   --memory 5000M \
-  --init \
   -e PASSWORD=$STAGING_TEST_PASSWORD \
   -e DISABLE_XSRF=TRUE \
   -e VIRTUAL_HOST=ipyn-az-$MYHOSTID.oit.duke.edu\:443 \
