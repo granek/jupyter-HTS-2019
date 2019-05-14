@@ -193,10 +193,11 @@ RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos =
 
 EXPOSE 8888
 
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
-RUN chmod +x /usr/bin/tini
-ENTRYPOINT ["/usr/bin/tini", "--"]
+# tini is included in docker. Just use --init in run command
+#ENV TINI_VERSION v0.18.0
+#ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+#RUN chmod +x /usr/bin/tini
+#ENTRYPOINT ["/usr/bin/tini", "--"]
 
 WORKDIR /home/$NB_USER/work
 
