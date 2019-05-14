@@ -29,5 +29,3 @@ sudo docker run --name jupyter-hts-2019-test-443 \
   -v /srv/persistent-data/homedirs/2015_data\:/data/:ro \
   -e NB_UID=1000 \
   -t jupyter-hts-2019-test
-
-while true; do sleep 1000; done
