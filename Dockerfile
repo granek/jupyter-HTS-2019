@@ -192,14 +192,15 @@ RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos =
 #----------- end datascience
 
 EXPOSE 8888
+WORKDIR /home/$NB_USER/work
+
 
 # tini is included in docker. Just use --init in run command
-#ENV TINI_VERSION v0.18.0
-#ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
-#RUN chmod +x /usr/bin/tini
-#ENTRYPOINT ["/usr/bin/tini", "--"]
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+RUN chmod +x /usr/bin/tini
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
-WORKDIR /home/$NB_USER/work
 
 # Configure container startup
 
