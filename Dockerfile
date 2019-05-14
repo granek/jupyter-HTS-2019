@@ -206,7 +206,7 @@ ENTRYPOINT ["/tini", "--"]
 
 # Configure container startup
 
-CMD ["start-notebook.sh"]
+CMD ["/usr/local/bin/start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
 COPY start.sh /usr/local/bin/

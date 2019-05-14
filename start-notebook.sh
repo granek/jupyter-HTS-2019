@@ -7,5 +7,5 @@ set -e
 #
 # start the notebook via xvfb-run so graphics work
 # 
-start.sh jupyter notebook $*
+/usr/local/bin/start.sh jupyter notebook $*
 
