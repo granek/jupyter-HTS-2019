@@ -178,7 +178,8 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 && \
+    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 \
+             r-recommends=3.5.3-1~stretchcran.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
