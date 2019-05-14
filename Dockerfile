@@ -178,7 +178,7 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-base=3.6.0-1~stretchcran.0 && \
+    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -193,9 +193,9 @@ RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos =
 EXPOSE 8888
 
 ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+RUN chmod +x /usr/bin/tini
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
 WORKDIR /home/$NB_USER/work
 
