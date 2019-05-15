@@ -178,15 +178,16 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-base=3.5.3-1~stretchcran.0 \
-             r-recommended=3.5.3-1~stretchcran.0 && \
+    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-recommended=3.5.3-1~stretchcran.0 \
+             r-base=3.5.3-1~stretchcran.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "install.packages(c('irkernel','plyr','devtools','tidyverse','shinyr'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('IRkernel','plyr','devtools','tidyverse','shinyr'), repos = 'https://cloud.r-project.org/')"
 RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'rsqlite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
 RUN Rscript -e "install.packages(c('caret', 'rcurl', 'crayon', 'randomforest', 'htmltools'), repos = 'https://cloud.r-project.org/')"
 RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "IRkernel::installspec(user = FALSE)"
 
 
 #----------- end datascience
