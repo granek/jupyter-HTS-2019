@@ -161,9 +161,10 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
-    libssl-dev \
+    pkg-config \
     openssl \ 
-    pkg-config && apt-get clean && \
+    libssl-dev && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
@@ -187,11 +188,11 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "install.packages(c('IRkernel','plyr','devtools','tidyverse','shinyr'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'rcurl', 'curl', 'tidyverse', 'shinyr'), repos = 'https://cloud.r-project.org/')"
 
-RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'rsqlite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'RSQLite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
 
-RUN Rscript -e "install.packages(c('caret', 'rcurl', 'crayon', 'randomforest', 'htmltools'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('caret', 'crayon', 'randomforest', 'htmltools'), repos = 'https://cloud.r-project.org/')"
 
 RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos = 'https://cloud.r-project.org/')"
 
