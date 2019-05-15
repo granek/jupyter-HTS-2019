@@ -122,12 +122,12 @@ RUN pip3 install --no-cache-dir 'pandas-datareader' \
     'ipython-sql' \
     'pandasql' \
     'memory_profiler'\
- #   'psutil' \
+    'psutil' \
     'cythongsl' \
     'joblib' \
     'ipyparallel' \
     'pybind11' \
- #   'pytables' \
+    'tables' \
     'plotnine' \
     'xlrd' 
     
