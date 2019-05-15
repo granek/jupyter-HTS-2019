@@ -184,9 +184,13 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     rm -rf /var/lib/apt/lists/*
 
 RUN Rscript -e "install.packages(c('IRkernel','plyr','devtools','tidyverse','shinyr'), repos = 'https://cloud.r-project.org/')"
+
 RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'rsqlite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
+
 RUN Rscript -e "install.packages(c('caret', 'rcurl', 'crayon', 'randomforest', 'htmltools'), repos = 'https://cloud.r-project.org/')"
+
 RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos = 'https://cloud.r-project.org/')"
+
 RUN Rscript -e "IRkernel::installspec(user = FALSE)"
 
 
@@ -242,6 +246,7 @@ RUN apt-get update \
     libarmadillo7 \
     libarmadillo-dev \
     liblapack3 \
+    libcurl4-openssl-dev \
     libblas-dev \
     liblapack-dev \
     libeigen3-dev \
@@ -335,9 +340,8 @@ USER root
 RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos = 'https://cloud.r-project.org/'); \ 
                    BiocManager::install()"
                    
-RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
+RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap', 'ggbio', 'ShortRead', 'DESeq2', 'dada2'))"
 
-# RUN conda install --quiet --yes -c r r-essentials
 # RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
 #RUN conda install --quiet --yes -c bioconda bioconductor-shortread
 #RUN conda install --quiet --yes -c bioconda bioconductor-dada2
