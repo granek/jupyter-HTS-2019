@@ -17,6 +17,8 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
  && apt-get install -yq --no-install-recommends \
     wget \
     bzip2 \
+    less \
+    make \
     ca-certificates \
     sudo \
     locales \
@@ -159,6 +161,7 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
+    libssl-dev \
     openssl \ 
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -270,6 +273,9 @@ USER jovyan
 RUN pip3 install cppimport
 RUN pip3 install pgmpy
 RUN pip3 install pygraphviz
+RUN pip3 install htseq
+RUN pip3 install pysam
+RUN pip3 install biopython
 
 
 ####### start HTS-summer-2018 additions
@@ -277,8 +283,6 @@ RUN pip3 install pygraphviz
 USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    less \
-    make \
     libxml2-dev \
     libgsl0-dev \
     fastqc default-jre \
@@ -309,20 +313,12 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/s
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-#  this part of the build hangs seemingly forever - so comment it out for now
-# RUN Rscript -e "install.packages(pkgs = c('pwr','RColorBrewer','GSA','dendextend','pheatmap','cgdsr', 'caret', 'ROCR'), \
-#    repos='https://cran.revolutionanalytics.com/', \
-#    dependencies=TRUE)"
-# RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
-#     biocLite(pkgs=c('DESeq2','qvalue','multtest','org.EcK12.eg.db','genefilter','GEOquery','KEGG.db','golubEsets', \
-#     'ggbio', 'limma'))"
-
 
 # Install R and bioconductor packages for Kouros's notebooks
 RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
             repos='https://cran.revolutionanalytics.com/', \
             dependencies=TRUE)"
-RUN Rscript -e "install.packages(pkgs = c('dendextend'), \
+RUN Rscript -e "install.packages(pkgs = c('dendextend', 'rentrez'), \
             repos='https://cran.revolutionanalytics.com/', \
             dependencies=TRUE)"
 #RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
@@ -341,13 +337,12 @@ USER root
 RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos = 'https://cloud.r-project.org/'); \ 
                    BiocManager::install()"
                    
-RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap', 'ggbio', 'ShortRead', 'DESeq2', 'dada2'))"
+RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap', 'ggbio', 'ShortRead', 'DESeq2', 'dada2', 'KEGG.db'))"
 
-# RUN conda install --quiet --yes -c bioconda bioconductor-ggbio
-#RUN conda install --quiet --yes -c bioconda bioconductor-shortread
-#RUN conda install --quiet --yes -c bioconda bioconductor-dada2
-#RUN conda install --quiet --yes 'nbdime' 
-#RUN conda install --quiet --yes -c bioconda bioconductor-deseq2 bioconductor-pathview r-rentrez
+RUN Rscript -e "BiocManager::install(c('pwr','RColorBrewer','GSA','dendextend','pheatmap','cgdsr', 'caret', 'ROCR'))"
+
+RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'))"
+
 #RUN conda install --quiet --yes -n python2 --channel https://conda.anaconda.org/Biobuilds htseq pysam biopython tophat
 
 # add htseq-count to path
