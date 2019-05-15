@@ -93,6 +93,9 @@ RUN apt-get update \
     libarmadillo7 \
     libarmadillo-dev \
     liblapack3 \
+    libcurl3 \
+    libss1.1 \
+    libssl-dev \
     libcurl4-openssl-dev \
     libblas-dev \
     liblapack-dev \
@@ -100,12 +103,19 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
  
+# R pre-requisites
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    fonts-dejavu \
+    gfortran \
+    gcc  \
     graphviz \
-    libgraphviz-dev && \
+    libgraphviz-dev \
+    gnupg2 \
+    openssl &&\ 
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
  
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -186,7 +196,13 @@ RUN pip3 install  \
     'pillow' \
     'requests' \
     'nose' \
-    'pystan'
+    'pystan' \
+    'cppimport' \
+    'pgmpy' \
+    'pygraphviz' \
+    'htseq' \
+    'pysam' \
+    'biopython' \
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
     
@@ -202,25 +218,11 @@ USER $NB_USER
 RUN mkdir -p $HOME/.ipython/profile_default/startup
 COPY mplimporthook.py $HOME/.ipython/profile_default/startup/
 
-
 #----------- end scipy
 
 #----------- datascience
 USER root
 
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
-    gfortran \
-    gcc  \
-    graphviz \
-    libgraphviz-dev \
-    gnupg2 \
-    openssl \ 
-    libssl-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
     apt-get install dirmngr -yq --install-recommends && \
@@ -278,27 +280,6 @@ COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 
-USER root
-
-
-
-USER jovyan
-# ggplot
-#
-#RUN pip install ggplot
-
-RUN pip3 install cppimport
-RUN pip3 install pgmpy
-RUN pip3 install pygraphviz
-RUN pip3 install htseq
-RUN pip3 install pysam
-RUN pip3 install biopython
-
-
-####### start HTS-summer-2018 additions
-
-
-
 
 # Install R and bioconductor packages for Kouros's notebooks
 RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
@@ -307,16 +288,6 @@ RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR')
 RUN Rscript -e "install.packages(pkgs = c('dendextend', 'rentrez'), \
             repos='https://cran.revolutionanalytics.com/', \
             dependencies=TRUE)"
-#RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); \
-#    biocLite(pkgs=c('golubEsets','multtest','qvalue','limma','gage','pheatmap'))"
-
-USER $NB_USER
-
-
-# Configure ipython kernel to use matplotlib inline backend by default
-RUN mkdir -p $HOME/.ipython/profile_default/startup
-RUN mkdir -p $HOME/thisisatest
-# COPY mplimporthook.py $HOME/.ipython/profile_default/startup/
 
 USER root
 
@@ -329,10 +300,6 @@ RUN Rscript -e "BiocManager::install(c('pwr','RColorBrewer','GSA','dendextend','
 
 RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'))"
 
-#RUN conda install --quiet --yes -n python2 --channel https://conda.anaconda.org/Biobuilds htseq pysam biopython tophat
-
-# add htseq-count to path
-#ENV PATH=${PATH}:$CONDA_DIR/envs/python2/bin
 
 # Setup up git auto-completion based on https://git-scm.com/book/en/v1/Git-Basics-Tips-and-Tricks#Auto-Completion
 # RUN wget --directory-prefix /etc/bash_completion.d/ \
@@ -340,13 +307,8 @@ RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'
 
 # directories to hold data for the students and a common shared space
 #######
-# RUN mkdir /data /shared_space 
-# RUN chown jovyan /data /shared_space 
-
-####### end HTS-summer-2018 additions
-
-#------end Duke-specific additions ---
+RUN mkdir /data /shared_space 
+RUN chown jovyan /data /shared_space 
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER jovyan
-
