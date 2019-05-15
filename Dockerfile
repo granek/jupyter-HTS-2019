@@ -159,6 +159,7 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
+    openssl \ 
     pkg-config && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
