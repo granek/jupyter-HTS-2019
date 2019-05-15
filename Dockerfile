@@ -34,6 +34,7 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     unzip \
     libsm6 \
     pandoc \
+    pkg-config \
     texlive-latex-base \
     texlive-latex-extra \
     texlive-fonts-extra \
@@ -48,6 +49,64 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     apt-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+ 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libxml2-dev \
+    libgsl0-dev \
+    libav-tools \
+    fastqc default-jre \
+    circos \
+    parallel \
+    time \
+    htop \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/sources.list.d/backports.list && \
+    apt-get update && \
+    apt-get -t stretch-backports install -y --no-install-recommends \
+    bwa \
+    samtools \
+    tabix \
+    picard-tools \
+    openjdk-11-jdk \
+    openjdk-11-jre \
+    sra-toolkit \
+    bcftools \
+    bedtools \
+    vcftools \
+    seqtk \
+#    ea-utils \
+    rna-star \
+    lftp \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+    
+# we need dvipng so that matplotlib can do LaTeX
+# we want OpenBLAS for faster linear algebra as described here: http://brettklamer.com/diversions/statistical/faster-blas-in-r/
+# Armadillo C++ linear algebra library - see http://arma.sourceforge.net
+RUN apt-get update \
+ && apt-get install -yq --no-install-recommends \
+    dvipng \
+    libopenblas-base \
+    libarmadillo7 \
+    libarmadillo-dev \
+    liblapack3 \
+    libcurl4-openssl-dev \
+    libblas-dev \
+    liblapack-dev \
+    libeigen3-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+ 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    graphviz \
+    libgraphviz-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+ 
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -73,17 +132,6 @@ RUN mkdir /home/$NB_USER/work && \
     mkdir /home/$NB_USER/.ssh && \
     printf "Host gitlab.oit.duke.edu \n \t IdentityFile ~/work/.HTSgitlab.key\n"  > /home/$NB_USER/.ssh/config && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
-
-USER root
-
-# libav-tools for matplotlib anim
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \ 
-      libav-tools && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-USER $NB_USER
 
 RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
@@ -132,20 +180,28 @@ RUN pip3 install --no-cache-dir 'pandas-datareader' \
     'tables' \
     'plotnine' \
     'xlrd' 
+
+RUN pip3 install  \
+    'numpy' \
+    'pillow' \
+    'requests' \
+    'nose' \
+    'pystan'
+
+RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
     
 USER root    
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 RUN ipcluster nbextension  enable --user
-USER $NB_USER
 
+
+USER $NB_USER
 
 # Configure ipython kernel to use matplotlib inline backend by default
 RUN mkdir -p $HOME/.ipython/profile_default/startup
 COPY mplimporthook.py $HOME/.ipython/profile_default/startup/
 
-
-USER $NB_USER
 
 #----------- end scipy
 
@@ -161,7 +217,6 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
-    pkg-config \
     openssl \ 
     libssl-dev && \
     apt-get clean && \
@@ -204,9 +259,7 @@ RUN Rscript -e "IRkernel::installspec(user = FALSE)"
 EXPOSE 8888
 WORKDIR /home/$NB_USER/work
 
-
-# tini is included in docker. Just use --init in run command
-# Or not. Competing documentation...
+# tini init
 
 ENV TINI_VERSION v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
@@ -225,46 +278,9 @@ COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 
-#--------- Duke-specific additions ---
-# add bash kernel for the user jovyan
-USER jovyan
-RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
-
 USER root
 
-RUN pip3 install  \
-    'numpy' \
-    'pillow' \
-    'requests' \
-    'nose' \
-    'pystan'
-    
-USER root
 
-# we need dvipng so that matplotlib can do LaTeX
-# we want OpenBLAS for faster linear algebra as described here: http://brettklamer.com/diversions/statistical/faster-blas-in-r/
-# Armadillo C++ linear algebra library - see http://arma.sourceforge.net
-RUN apt-get update \
- && apt-get install -yq --no-install-recommends \
-    dvipng \
-    libopenblas-base \
-    libarmadillo7 \
-    libarmadillo-dev \
-    liblapack3 \
-    libcurl4-openssl-dev \
-    libblas-dev \
-    liblapack-dev \
-    libeigen3-dev \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
- 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    graphviz \
-    libgraphviz-dev \
-    pkg-config && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
- 
 
 USER jovyan
 # ggplot
@@ -281,38 +297,7 @@ RUN pip3 install biopython
 
 ####### start HTS-summer-2018 additions
 
-USER root
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    libxml2-dev \
-    libgsl0-dev \
-    fastqc default-jre \
-    circos \
-    parallel \
-    time \
-    htop \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
-RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/sources.list.d/backports.list && \
-    apt-get update && \
-    apt-get -t stretch-backports install -y --no-install-recommends \
-    bwa \
-    samtools \
-    tabix \
-    picard-tools \
-    openjdk-11-jdk \
-    openjdk-11-jre \
-    sra-toolkit \
-    bcftools \
-    bedtools \
-    vcftools \
-    seqtk \
-#    ea-utils \
-    rna-star \
-    lftp \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 
 # Install R and bioconductor packages for Kouros's notebooks
