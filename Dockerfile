@@ -95,12 +95,19 @@ RUN apt-get update \
     libarmadillo-dev \
     liblapack3 \
     libcurl3 \
+    libcurl4-gnutls-dev \
     libssl1.1 \
     libssl-dev \
-    libcurl4-openssl-dev \
+#    libcurl4-openssl-dev \
     libblas-dev \
     liblapack-dev \
     libeigen3-dev \
+    libpng-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libunwind-dev \
+    libcairo2-dev \
+    texinfo \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
  
@@ -203,7 +210,9 @@ RUN pip3 install  \
     'pygraphviz' \
     'htseq' \
     'pysam' \
-    'biopython'
+    'biopython' \
+    'DukeDSClient' \
+    'multiqc'
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
     
@@ -234,19 +243,24 @@ RUN apt-get update && \
 # Add cran repo    
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
-    apt-get update && \
-    apt-cache policy r-base
+#RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
+#    apt-get update && \
+#    apt-cache policy r-base
 # R packages
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-recommended=3.5.3-1~stretchcran.0 \
-             r-base=3.5.3-1~stretchcran.0 && \
+    apt-get install -yq --allow-unauthenticated -t stretch-cran35   r-recommended=3.6.0-1~stretchcran.0 \
+             r-base=3.6.0-1~stretchcran.0 \
+             r-base-core=3.6.0-1~stretchcran.0 \
+             r-base-dev=3.6.0-1~stretchcran.0 \
+             r-mathlib=3.6.0-1~stretchcran.0 \
+             r-base-html=3.6.0-1~stretchcran.0 \
+             r-doc-html=3.6.0-1~stretchcran.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'rcurl', 'curl', 'tidyverse', 'shinyr'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'RCurl', 'curl', 'tidyverse', 'shiny'), repos = 'https://cloud.r-project.org/')"
 
 RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'RSQLite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
 
