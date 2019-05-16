@@ -95,10 +95,10 @@ RUN apt-get update \
     libarmadillo-dev \
     liblapack3 \
     libcurl3 \
+    libcurl4-gnutls-dev \
     libssl1.1 \
     libssl-dev \
     libcurl4-openssl-dev \
-    libcurl4-gnutls-dev \
     libblas-dev \
     liblapack-dev \
     libeigen3-dev \
