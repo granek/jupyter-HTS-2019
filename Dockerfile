@@ -94,7 +94,7 @@ RUN apt-get update \
     libarmadillo-dev \
     liblapack3 \
     libcurl3 \
-    libss1.1 \
+    libssl1.1 \
     libssl-dev \
     libcurl4-openssl-dev \
     libblas-dev \
