@@ -250,10 +250,10 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-recommended=3.5.3-1~stretchcran.0 \
-             r-base-core=3.5.3-1~stretchcran.0 \
-             r-base=3.5.3-1~stretchcran.0 \
+    apt-get install -yq --allow-unauthenticated -t stretch-cran35   r-base=3.5.3-1~stretchcran.0 \
              r-base-dev=3.5.3-1~stretchcran.0 \
+             r-base-core=3.5.3-1~stretchcran.0 \
+             r-recommended=3.5.3-1~stretchcran.0 \
              r-base-html=3.5.3-1~stretchcran.0 &&\
       #       r-doc=3.5.3-1~stretchcran.0 && \
     apt-get clean && \
