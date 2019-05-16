@@ -98,7 +98,7 @@ RUN apt-get update \
     libcurl4-gnutls-dev \
     libssl1.1 \
     libssl-dev \
-    libcurl4-openssl-dev \
+#    libcurl4-openssl-dev \
     libblas-dev \
     liblapack-dev \
     libeigen3-dev \
