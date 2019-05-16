@@ -50,9 +50,6 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     apt-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
-
-ENV PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 
-RUN pkg-config --cflags  /tmp/x.pc -I/usr/include
  
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
