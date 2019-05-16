@@ -11,6 +11,7 @@ USER root
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
+
 RUN REPO=http://cdn-fastly.deb.debian.org \
  && echo "deb $REPO/debian stretch main\ndeb $REPO/debian-security stretch/updates main" > /etc/apt/sources.list \
  && apt-get update && apt-get -yq dist-upgrade \
@@ -49,6 +50,9 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     apt-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+ENV PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 
+RUN pkg-config --cflags  /tmp/x.pc -I/usr/include
  
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -202,7 +206,7 @@ RUN pip3 install  \
     'pygraphviz' \
     'htseq' \
     'pysam' \
-    'biopython' \
+    'biopython'
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
     
