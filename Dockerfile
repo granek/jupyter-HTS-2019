@@ -98,9 +98,16 @@ RUN apt-get update \
     libssl1.1 \
     libssl-dev \
     libcurl4-openssl-dev \
+    libcurl4-gnutls-dev \
     libblas-dev \
     liblapack-dev \
     libeigen3-dev \
+    libpng-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libunwind-dev \
+    libcairo2-dev \
+    texinfo \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
  
@@ -204,6 +211,7 @@ RUN pip3 install  \
     'htseq' \
     'pysam' \
     'biopython' \
+    'DukeDSClient' \
     'multiqc'
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
@@ -235,15 +243,19 @@ RUN apt-get update && \
 # Add cran repo    
 RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list
 
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
-    apt-get update && \
-    apt-cache policy r-base
+#RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
+#    apt-get update && \
+#    apt-cache policy r-base
 # R packages
 
 RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
     apt-get update && \
     apt-get install -yq --allow-unauthenticated -t stretch-cran35 r-recommended=3.5.3-1~stretchcran.0 \
-             r-base=3.5.3-1~stretchcran.0 && \
+             r-base-core=3.5.3-1~stretchcran.0 \
+             r-base=3.5.3-1~stretchcran.0 \
+             r-base-dev=3.5.3-1~stretchcran.0 \
+             r-base-html=3.5.3-1~stretchcran.0 \
+             r-doc=3.5.3-1~stretchcran.0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
