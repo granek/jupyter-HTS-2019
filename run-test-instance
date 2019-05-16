@@ -14,6 +14,7 @@ done < $INPUT
 IFS=$OLDIFS
 
 echo ipyn-az-$MYHOSTID.oit.duke.edu:443
+
 sudo docker kill jupyter-hts-2019-test-443
 sudo docker rm jupyter-hts-2019-test-443
 sudo docker run --name jupyter-hts-2019-test-443 \
@@ -29,4 +30,3 @@ sudo docker run --name jupyter-hts-2019-test-443 \
   -v /srv/persistent-data/homedirs/2015_data\:/data/:ro \
   -e NB_UID=1000 \
   -t jupyter-hts-2019-test
-

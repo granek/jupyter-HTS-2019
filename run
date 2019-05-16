@@ -1,5 +1,6 @@
 sudo docker run --name jupyter-hts-2019 \
   -d -p 9999:8888 \
+  --init \
   -e PASSWORD="badpassword" \
   -e DISABLE_XSRF=TRUE \
   -v /your_homedir_path_here:/home/jovyan/work \
