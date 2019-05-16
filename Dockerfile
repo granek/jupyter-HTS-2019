@@ -203,7 +203,8 @@ RUN pip3 install  \
     'pygraphviz' \
     'htseq' \
     'pysam' \
-    'biopython'
+    'biopython' \
+    'multiqc'
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
     
@@ -246,7 +247,7 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'rcurl', 'curl', 'tidyverse', 'shinyr'), repos = 'https://cloud.r-project.org/')"
+RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'RCurl', 'curl', 'tidyverse', 'shiny'), repos = 'https://cloud.r-project.org/')"
 
 RUN Rscript -e "install.packages(c('rmarkdown', 'forecast', 'RSQLite', 'reshape2', 'nycflights13'), repos = 'https://cloud.r-project.org/')"
 
