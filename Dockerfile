@@ -329,9 +329,12 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+USER $NB_USER
+
 # downgrade matplotlib for multiqc
 RUN pip3 uninstall matplotlib && \
     pip3 install 'matplotlib==2.2.3'
+USER root
 
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
