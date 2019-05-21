@@ -48,6 +48,7 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     tar \
     python3-pip \
     apt-utils \
+    curl \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
  
@@ -323,12 +324,6 @@ RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'
 # directories to hold data for the students and a common shared space
 
 # UNDER CONSTRUCTION: Nerd Work Zone >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 USER $NB_USER
 
 # downgrade matplotlib for multiqc
