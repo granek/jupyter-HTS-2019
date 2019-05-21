@@ -332,7 +332,7 @@ RUN apt-get update && \
 USER $NB_USER
 
 # downgrade matplotlib for multiqc
-RUN pip3 uninstall matplotlib && \
+RUN pip3 uninstall --yes matplotlib && \
     pip3 install 'matplotlib==2.2.3'
 USER root
 
