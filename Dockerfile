@@ -332,12 +332,17 @@ RUN pip3 uninstall --yes matplotlib && \
 USER root
 
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    ea-utils \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
+# install fastq-mcf and fastq-multx from source since apt-get install causes problems
+RUN mkdir -p /usr/bin && \
+    	  cd /tmp && \
+	  wget https://github.com/ExpressionAnalysis/ea-utils/archive/1.04.807.tar.gz && \
+	  tar -zxf 1.04.807.tar.gz &&  \
+    	  cd ea-utils-1.04.807/clipper &&  \
+    	  make fastq-mcf fastq-multx &&  \
+    	  cp fastq-mcf fastq-multx /usr/bin &&  \
+    	  cd /tmp &&  \
+    	  rm -rf ea-utils-1.04.807
 
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
