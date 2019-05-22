@@ -331,6 +331,14 @@ RUN pip3 uninstall --yes matplotlib && \
     pip3 install 'matplotlib==2.2.3'
 USER root
 
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ea-utils \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #######
