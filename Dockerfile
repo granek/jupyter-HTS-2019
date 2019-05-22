@@ -216,6 +216,11 @@ RUN pip3 install  \
     'multiqc'
 
 RUN pip3 install  bash_kernel && python3 -m bash_kernel.install
+
+# downgrade matplotlib for multiqc
+RUN pip3 uninstall --yes matplotlib && \
+    pip3 install 'matplotlib==2.2.3'
+
     
 USER root    
 # Activate ipywidgets extension in the environment that runs the notebook server
@@ -271,7 +276,35 @@ RUN Rscript -e "install.packages(c('sparklyr', 'htmlwidgets', 'hexbin'), repos =
 
 RUN Rscript -e "IRkernel::installspec(user = FALSE)"
 
+#--------------------------------------------
+# Install R and bioconductor packages for Kouros's notebooks
+RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
+            repos='https://cran.revolutionanalytics.com/', \
+            dependencies=TRUE)"
+RUN Rscript -e "install.packages(pkgs = c('dendextend', 'rentrez'), \
+            repos='https://cran.revolutionanalytics.com/', \
+            dependencies=TRUE)"
 
+RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos = 'https://cloud.r-project.org/'); \ 
+                   BiocManager::install()"
+                   
+RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap', 'ggbio', 'ShortRead', 'DESeq2', 'dada2', 'KEGG.db'))"
+
+RUN Rscript -e "BiocManager::install(c('pwr','RColorBrewer','GSA','dendextend','pheatmap','cgdsr', 'caret', 'ROCR'))"
+
+RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'))"
+
+# install fastq-mcf and fastq-multx from source since apt-get install causes problems
+RUN mkdir -p /usr/bin && \
+    	  cd /tmp && \
+	  wget https://github.com/ExpressionAnalysis/ea-utils/archive/1.04.807.tar.gz && \
+	  tar -zxf 1.04.807.tar.gz &&  \
+    	  cd ea-utils-1.04.807/clipper &&  \
+    	  make fastq-mcf fastq-multx &&  \
+    	  cp fastq-mcf fastq-multx /usr/bin &&  \
+    	  cd /tmp &&  \
+    	  rm -rf ea-utils-1.04.807
+	  
 #----------- end datascience
 
 EXPOSE 8888
@@ -297,26 +330,6 @@ COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 
 
-# Install R and bioconductor packages for Kouros's notebooks
-RUN Rscript -e "install.packages(pkgs = c('ROCR','mvtnorm','pheatmap','formatR'), \
-            repos='https://cran.revolutionanalytics.com/', \
-            dependencies=TRUE)"
-RUN Rscript -e "install.packages(pkgs = c('dendextend', 'rentrez'), \
-            repos='https://cran.revolutionanalytics.com/', \
-            dependencies=TRUE)"
-
-USER root
-
-RUN Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos = 'https://cloud.r-project.org/'); \ 
-                   BiocManager::install()"
-                   
-RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma','gage','pheatmap', 'ggbio', 'ShortRead', 'DESeq2', 'dada2', 'KEGG.db'))"
-
-RUN Rscript -e "BiocManager::install(c('pwr','RColorBrewer','GSA','dendextend','pheatmap','cgdsr', 'caret', 'ROCR'))"
-
-RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'))"
-
-
 # Setup up git auto-completion based on https://git-scm.com/book/en/v1/Git-Basics-Tips-and-Tricks#Auto-Completion
 # RUN wget --directory-prefix /etc/bash_completion.d/ \
 #      https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
@@ -324,26 +337,8 @@ RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'
 # directories to hold data for the students and a common shared space
 
 # UNDER CONSTRUCTION: Nerd Work Zone >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-USER $NB_USER
-
-# downgrade matplotlib for multiqc
-RUN pip3 uninstall --yes matplotlib && \
-    pip3 install 'matplotlib==2.2.3'
-USER root
-
-
-
-# install fastq-mcf and fastq-multx from source since apt-get install causes problems
-RUN mkdir -p /usr/bin && \
-    	  cd /tmp && \
-	  wget https://github.com/ExpressionAnalysis/ea-utils/archive/1.04.807.tar.gz && \
-	  tar -zxf 1.04.807.tar.gz &&  \
-    	  cd ea-utils-1.04.807/clipper &&  \
-    	  make fastq-mcf fastq-multx &&  \
-    	  cp fastq-mcf fastq-multx /usr/bin &&  \
-    	  cd /tmp &&  \
-    	  rm -rf ea-utils-1.04.807
-
+# USER $NB_USER
+# USER root
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #######
