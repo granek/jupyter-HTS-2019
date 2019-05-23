@@ -3,8 +3,7 @@
 
 FROM debian:stretch 
 
-MAINTAINER Mark McCahill "mark.mccahill@duke.edu"
-# Modified by Janice McCarthy 5/9/2019
+MAINTAINER Janice McCarthy "janice.mccarthy@duke.edu"
 
 USER root
 
@@ -307,6 +306,9 @@ RUN mkdir -p /usr/bin && \
 	  
 #----------- end datascience
 
+
+
+#----------- notebook
 EXPOSE 8888
 WORKDIR /home/$NB_USER/work
 
@@ -329,7 +331,21 @@ COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 
+#----------- eDirect
 
+ cd ~/work
+  /bin/bash
+  perl -MNet::FTP -e \
+    '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1);
+     $ftp->login; $ftp->binary;
+     $ftp->get("/entrez/entrezdirect/edirect.tar.gz");'
+  gunzip -c edirect.tar.gz | tar xf -
+  rm edirect.tar.gz
+  builtin exit
+  export PATH=${PATH}:$HOME/work/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/work/edirect"
+  ./edirect/setup.sh
+  
+  
 # Setup up git auto-completion based on https://git-scm.com/book/en/v1/Git-Basics-Tips-and-Tricks#Auto-Completion
 # RUN wget --directory-prefix /etc/bash_completion.d/ \
 #      https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
