@@ -335,17 +335,17 @@ RUN chown -R $NB_USER:users /home/$NB_USER/.jupyter
 
 USER $NB_USER
 
-RUN cd ~/work
-RUN  /bin/bash \
-  perl -MNet::FTP -e \
-    '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1); \
-     $ftp->login; $ftp->binary; \
-     $ftp->get("/entrez/entrezdirect/edirect.tar.gz");' \
-  gunzip -c edirect.tar.gz | tar xf - \
-  rm edirect.tar.gz \
-  builtin exit \
-  export PATH=${PATH}:$HOME/work/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/work/edirect" \
-  ./edirect/setup.sh
+# RUN cd ~/work
+# RUN  /bin/bash \
+#   perl -MNet::FTP -e \
+#     '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1); \
+#      $ftp->login; $ftp->binary; \
+#      $ftp->get("/entrez/entrezdirect/edirect.tar.gz");' \
+#   gunzip -c edirect.tar.gz | tar xf - \
+#   rm edirect.tar.gz \
+#   builtin exit \
+#   export PATH=${PATH}:$HOME/work/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/work/edirect" \
+#   ./edirect/setup.sh
   
   
 # Setup up git auto-completion based on https://git-scm.com/book/en/v1/Git-Basics-Tips-and-Tricks#Auto-Completion
