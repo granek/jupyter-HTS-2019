@@ -356,7 +356,13 @@ RUN  /bin/bash \
 
 # UNDER CONSTRUCTION: Nerd Work Zone >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # USER $NB_USER
-# USER root
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    art-nextgen-simulation-tools \
+    art-nextgen-simulation-tools-profiles \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #######
