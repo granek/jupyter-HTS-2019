@@ -291,7 +291,7 @@ RUN Rscript -e "BiocManager::install(c('golubEsets','multtest','qvalue','limma',
 
 RUN Rscript -e "BiocManager::install(c('pwr','RColorBrewer','GSA','dendextend','pheatmap','cgdsr', 'caret', 'ROCR'))"
 
-RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery'))"
+RUN Rscript -e "BiocManager::install(c('org.EcK12.eg.db','genefilter','GEOquery', 'airway'))"
 
 # install fastq-mcf and fastq-multx from source since apt-get install causes problems
 RUN mkdir -p /usr/bin && \
