@@ -363,6 +363,9 @@ RUN apt-get update && \
     art-nextgen-simulation-tools-profiles \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN Rscript -e "BiocManager::install(c('Gviz'))"
+
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #######
