@@ -365,6 +365,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN Rscript -e "BiocManager::install(c('Gviz'))"
+RUN Rscript -e "BiocManager::install(c('phyloseq'))"
+
 
 # UNDER CONSTRUCTION: Nerd Work Zone <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
