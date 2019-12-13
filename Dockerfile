@@ -151,9 +151,11 @@ RUN mkdir /home/$NB_USER/work && \
     printf "Host gitlab.oit.duke.edu \n \t IdentityFile ~/work/.HTSgitlab.key\n"  > /home/$NB_USER/.ssh/config && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
 
+USER root
+
 RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
-RUN pip3 install --user jupyter
+RUN pip3 install jupyter
 
 RUN pip3 install --no-cache-dir  \
  #   'nomkl' \
