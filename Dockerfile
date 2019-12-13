@@ -47,9 +47,7 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
     tar \
     python3-pip \
     apt-utils \
-    curl \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+    curl
  
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -60,9 +58,7 @@ RUN apt-get update && \
     circos \
     parallel \
     time \
-    htop \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    htop
 
 RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/sources.list.d/backports.list && \
     apt-get update && \
@@ -80,9 +76,7 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >  /etc/apt/s
     seqtk \
 #    ea-utils \
     rna-star \
-    lftp \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    lftp
     
 # we need dvipng so that matplotlib can do LaTeX
 # we want OpenBLAS for faster linear algebra as described here: http://brettklamer.com/diversions/statistical/faster-blas-in-r/
@@ -107,9 +101,7 @@ RUN apt-get update \
     liblzma-dev \
     libunwind-dev \
     libcairo2-dev \
-    texinfo \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+    texinfo
  
 # R pre-requisites
 RUN apt-get update && \
@@ -120,11 +112,7 @@ RUN apt-get update && \
     graphviz \
     libgraphviz-dev \
     gnupg2 \
-    openssl &&\ 
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
- 
+    openssl
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -265,9 +253,8 @@ RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch
              r-base-dev=3.6.0-1~stretchcran.0 \
              r-mathlib=3.6.0-1~stretchcran.0 \
              r-base-html=3.6.0-1~stretchcran.0 \
-             r-doc-html=3.6.0-1~stretchcran.0 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+             r-doc-html=3.6.0-1~stretchcran.0
+
 
 RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'RCurl', 'curl', 'tidyverse', 'shiny'), repos = 'https://cloud.r-project.org/')"
 
@@ -364,9 +351,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     art-nextgen-simulation-tools \
-    art-nextgen-simulation-tools-profiles \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    art-nextgen-simulation-tools-profiles
 
 RUN Rscript -e "BiocManager::install(c('Gviz'))"
 RUN Rscript -e "BiocManager::install(c('phyloseq'))"
@@ -376,6 +361,11 @@ RUN Rscript -e "BiocManager::install(c('phyloseq'))"
 
 #######
 USER root
+
+# Clean up 
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /data /shared_space 
 RUN chown jovyan /data /shared_space 
 
