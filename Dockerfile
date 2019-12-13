@@ -10,6 +10,8 @@ USER root
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
+ENV R_VERSION="3.6.1"
+
 
 RUN REPO=http://cdn-fastly.deb.debian.org \
  && echo "deb $REPO/debian stretch main\ndeb $REPO/debian-security stretch/updates main" > /etc/apt/sources.list \
@@ -234,27 +236,24 @@ RUN apt-get update && \
     apt-get install software-properties-common -yq &&\
     apt-get install apt-transport-https -yq 
 
-
-# Add cran repo
-
-RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list && \
-    apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
-
-#RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
-#    apt-get update && \
-#    apt-cache policy r-base
-# R packages
-
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' && \ 
-    apt-get update && \
-    apt-get install -yq --allow-unauthenticated -t stretch-cran35   r-recommended=3.6.0-1~stretchcran.0 \
-             r-base=3.6.0-1~stretchcran.0 \
-             r-base-core=3.6.0-1~stretchcran.0 \
-             r-base-dev=3.6.0-1~stretchcran.0 \
-             r-mathlib=3.6.0-1~stretchcran.0 \
-             r-base-html=3.6.0-1~stretchcran.0 \
-             r-doc-html=3.6.0-1~stretchcran.0
-
+# Install R
+RUN echo "deb http://cran.r-project.org/bin/linux/ubuntu bionic-cran35/" > /etc/apt/sources.list.d/r.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+  # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+RUN apt-get update && \
+    apt-get -yq --no-install-recommends install \
+    r-base=${R_VERSION}* \
+    r-base-core=${R_VERSION}* \
+    r-base-dev=${R_VERSION}* \
+    r-mathlib=${R_VERSION}* \
+    r-recommended=${R_VERSION}* \
+    r-base-html=${R_VERSION}* \
+    r-doc-html=${R_VERSION}* \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libcairo2-dev \
+    libxt-dev
 
 RUN Rscript -e "install.packages(c('IRkernel', 'plyr','devtools', 'RCurl', 'curl', 'tidyverse', 'shiny'), repos = 'https://cloud.r-project.org/')"
 
