@@ -10,7 +10,7 @@ USER root
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
-ENV R_VERSION="3.6.1"
+ENV R_VERSION="3.6.2"
 
 
 RUN REPO=http://cdn-fastly.deb.debian.org \
@@ -233,15 +233,22 @@ USER root
 
 RUN apt-get update && \
     apt-get install dirmngr -yq --install-recommends && \
-    apt-get install software-properties-common -yq &&\
-    apt-get install apt-transport-https -yq 
+    apt-get install software-properties-common -yq && \
+    apt-get install apt-transport-https -yq
 
 # Install R
-RUN echo "deb http://cran.r-project.org/bin/linux/ubuntu bionic-cran35/" > /etc/apt/sources.list.d/r.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-  # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+# RUN apt-get install gnupg2
+# RUN mkdir ~/.gnupg && \
+#      echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf && \
+#      gpg2 --keyserver keys.gnupg.net --recv-keys 3F32EE77E331692F
+
+# Add cran repo
+
+RUN echo "deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/" >> /etc/sources.list && \
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/'
+
 RUN apt-get update && \
-    apt-get -yq --no-install-recommends install \
+    apt-get -yq --no-install-recommends --allow-unauthenticated install \
     r-base=${R_VERSION}* \
     r-base-core=${R_VERSION}* \
     r-base-dev=${R_VERSION}* \
