@@ -138,6 +138,7 @@ USER $NB_USER
 RUN mkdir /home/$NB_USER/work && \
     mkdir /home/$NB_USER/.jupyter && \
     mkdir /home/$NB_USER/.ssh && \
+    mkdir -p /home/$NB_USER/.local/share/jupyter/runtime && \
     printf "Host gitlab.oit.duke.edu \n \t IdentityFile ~/work/.HTSgitlab.key\n"  > /home/$NB_USER/.ssh/config && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
 
@@ -213,7 +214,7 @@ RUN pip3 uninstall --yes matplotlib && \
     pip3 install 'matplotlib==2.2.3'
 
     
-USER root    
+# USER root    
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 RUN ipcluster nbextension  enable --user
